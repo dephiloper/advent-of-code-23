@@ -1,0 +1,13 @@
+{
+  "name": "avent-of-code",
+  "version": "1.0.0",
+  "description": "advent of code 2023",
+  "main": "main.ts",
+  "license": "MIT",
+  "scripts": {
+    "d1": "npx ts-node day_01/main.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.4"
+  }
+}
