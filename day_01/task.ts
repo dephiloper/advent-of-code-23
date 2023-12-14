@@ -41,19 +41,21 @@ function findNumbers(line: string): string[] {
     return numbers;
 }
 
-fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-        console.error(err);
-        return;
-    }
+export function day01() {
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
 
-    // go through all the lines
-    const lines = data.split('\n');
-    let sum = 0;
-    for (const line of lines) {
-        const numbers = findNumbers(line);
-        sum += Number(`${numbers[0]}${numbers[numbers.length - 1]}`)
-    }
+        // go through all the lines
+        const lines = data.split('\n');
+        let sum = 0;
+        for (const line of lines) {
+            const numbers = findNumbers(line);
+            sum += Number(`${numbers[0]}${numbers[numbers.length - 1]}`)
+        }
 
-    console.log(`The sum is ${sum}`);
-});
+        console.log(`The sum is ${sum}`);
+    });
+}
