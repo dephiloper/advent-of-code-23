@@ -35,7 +35,6 @@ function findNeighborSymbols(dimensions: { w: number, h: number }, part: Part, s
             index + dimensions.w + 1, // bottom-right
         ];
 
-
         // check if neighbor is a symbol
         for (const neighbor of neighbors) {
             // check if neighbor is out of bounds
@@ -57,6 +56,43 @@ function findNeighborSymbols(dimensions: { w: number, h: number }, part: Part, s
     }
 
     return neighborSymbols;
+}
+
+function findNeighborParts(dimensions: { w: number, h: number }, symbol: Symbol, parts: Part[]) {
+    const { index } = symbol;
+    const symbolLine = Math.floor(symbol.index / dimensions.w);
+    const neighboringParts = new Set<Part>();
+
+    const neighbors = [
+        index - 1, // left
+        index + 1, // right
+        index - dimensions.w, // top
+        index + dimensions.w, // bottom
+        index - dimensions.w - 1, // top-left
+        index - dimensions.w + 1, // top-right
+        index + dimensions.w - 1, // bottom-left
+        index + dimensions.w + 1, // bottom-right
+    ];
+
+    // check if neighbor is a part
+    for (const neighbor of neighbors) {
+        // check if neighbor is out of bounds
+        if (neighbor < 0 || neighbor >= dimensions.w * dimensions.h) {
+            continue;
+        }
+
+        // check if neighbor is two lines apart
+        const neighborLine = Math.floor(neighbor / dimensions.w);
+        if (Math.abs(symbolLine - neighborLine) > 1) {
+            continue;
+        }
+        // get parts that are positioned on the neighboring index of the symbol
+        const neighborParts = parts.filter(p => p.indices.includes(neighbor));
+
+        neighborParts.forEach(part => neighboringParts.add(part));
+    }
+
+    return neighboringParts;
 }
 
 export function day03() {
@@ -98,12 +134,26 @@ export function day03() {
         });
 
         let enginePartSum = 0;
+        let engineGearRatioSum = 0;
 
         parts.forEach(part => {
             const neighborSymbols = findNeighborSymbols({ w: width, h: height }, part, symbols);
             enginePartSum += neighborSymbols.size > 0 ? part.value : 0;
         });
 
+        symbols.filter(symbol => symbol.value === '*').forEach(symbol => {
+            const neighborParts = findNeighborParts({ w: width, h: height }, symbol, parts);
+            if (neighborParts.size > 1) {
+                console.log(symbol, neighborParts);
+                let gearRatio = 1;
+                neighborParts.forEach(part => {
+                    gearRatio *= Number(part.value);
+                });
+                engineGearRatioSum += gearRatio;
+            }
+        });
+
         console.log('What is the sum of all of the part numbers in the engine schematic?', enginePartSum);
+        console.log('What is the sum of all of the gear ratios in your engine schematic?', engineGearRatioSum);
     });
 }
