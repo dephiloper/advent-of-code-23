@@ -24,20 +24,18 @@ function findNumbers(line: string): string[] {
             numbers.push(line[i]);
         }
 
-        // const subString = line.substring(i);
+        const subString = line.substring(i);
 
-        // // check if subString starts with a spelled out number
-        // const index = spelledOutNumbers.findIndex((spelledOutNumber) => {
-        //     if (subString.startsWith(spelledOutNumber)) {
-        //         return spelledOutNumbers.indexOf(spelledOutNumber);
-        //     }
-        // });
+        // check if subString starts with a spelled out number
+        const index = spelledOutNumbers.findIndex((spelledOutNumber) => {
+            if (subString.startsWith(spelledOutNumber)) {
+                return spelledOutNumbers.indexOf(spelledOutNumber);
+            }
+        });
 
-        // if (index !== -1) {
-        //     numbers.push(index.toString());
-        // } else {
-        //     console.log('no number found');
-        // }
+        if (index !== -1) {
+            numbers.push(index.toString());
+        }
     }
 
     return numbers;
