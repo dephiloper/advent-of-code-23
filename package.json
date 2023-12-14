@@ -5,7 +5,8 @@
   "main": "main.ts",
   "license": "MIT",
   "scripts": {
-    "d1": "npx ts-node day_01/main.ts"
+    "d1": "npx ts-node day_01/main.ts",
+    "d2": "npx ts-node day_02/main.ts"
   },
   "devDependencies": {
     "@types/node": "^20.10.4"
