@@ -114,7 +114,7 @@ function translateSeed(seed: number, mealMaps: FoodProductionMap[]): number {
 
         // console.log(goalProductionElement, seed);
         translationMap = mealMaps.find((mealMap) => mealMap.from === goalProductionElement);
-        
+
         if (translationMap !== undefined) {
             startProductionElement = translationMap.from;
             goalProductionElement = translationMap.to;
@@ -130,15 +130,34 @@ export function day05() {
     const filePath = './day_05/meals.txt';
     const data = fs.readFileSync(filePath, 'utf8');
     const lines = data.split('\n');
-    const seeds = lines[0].split(': ')[1].split(' ').map((seed) => Number(seed));
+    const seedRanges = lines[0].split(': ')[1].split(' ').map((seed) => Number(seed));
+
+    let lowestValue: number = Number.MAX_SAFE_INTEGER;
 
     // remove lines[0] from lines
     lines.shift();
 
     const mealMaps = readMealProductionFile(lines);
 
+    // create a list of seeds based on seedRanges
+    // always look at the entires in pairs
+    // the first entry is the start of the range, the second entry the length of the range
+    for (let i = 0; i < seedRanges.length; i += 2) {
+        console.log('progress:', i / seedRanges.length * 100, '%');
+        const seedRangeStart = seedRanges[i];
+        const seedRangeLength = seedRanges[i + 1];
+        const seeds: number[] = [];
+        for (let seed = seedRangeStart; seed < seedRangeStart + seedRangeLength; seed++) {
+            const tranlatedValue = translateSeed(seed, mealMaps);
+            if (tranlatedValue < lowestValue) {
+                lowestValue = tranlatedValue;
+                console.log('new lowest value:', lowestValue);
+            }
+        }
+    }
+
+
+
     // get all translated seeds
-    const translatedSeeds = seeds.map((seed) => translateSeed(seed, mealMaps));
-    translatedSeeds.sort((a, b) => a - b);
-    console.log('What is the lowest location number that corresponds to any of the initial seed numbers?', translatedSeeds[0]);
+    console.log('What is the lowest location number that corresponds to any of the initial seed numbers?', lowestValue);
 }
